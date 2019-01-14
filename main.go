@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
+
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -22,7 +24,11 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 func main() {
-	router := httprouter.New()
-	router.GET("/", Index)
+	// router := httprouter.New()
+	// router.GET("/", Index)
+	// http.ListenAndServe(":3000", router)
+
+	router := mux.NewRouter()
+	router.HandleFunc("/", handlerFunc)
 	http.ListenAndServe(":3000", router)
 }
