@@ -5,30 +5,44 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-
-	"github.com/julienschmidt/httprouter"
 )
 
 func handlerFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if r.URL.Path == "/" {
-		fmt.Fprint(w, "<h1>Home page</h1>")
+	if r.URL.Path == "/contact" {
+		fmt.Fprint(w, "<h1>Contact page</h1>")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprint(w, "<h1>404</h1>")
 	}
 }
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Welcome!\n")
+func home(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "<h1>Home page</h1>")
+}
+
+func contact(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "<h1>Contact page</h1>")
+}
+
+func faq(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "<h1>Faq page</h1>")
+}
+
+func notFound(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusNotFound)
+	fmt.Fprintf(w, "<h1>404 custom page</h1>")
 }
 
 func main() {
-	// router := httprouter.New()
-	// router.GET("/", Index)
-	// http.ListenAndServe(":3000", router)
-
 	router := mux.NewRouter()
-	router.HandleFunc("/", handlerFunc)
+	router.NotFoundHandler = http.HandlerFunc(notFound)
+	router.HandleFunc("/", home)
+	router.HandleFunc("/contact", contact)
+	router.HandleFunc("/faq", faq)
 	http.ListenAndServe(":3000", router)
 }
