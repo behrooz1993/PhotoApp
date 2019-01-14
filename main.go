@@ -7,7 +7,11 @@ import (
 
 func handlerFunc(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "text/html")
-  fmt.Fprint(w, "<h1>Hello worldddd!</h1>")
+  if r.URL.Path == "/" {
+    fmt.Fprint(w, "<h1>Home page</h1>")
+  }else {
+    fmt.Fprint(w, "<h1>Some other page</h1>")
+  } 
 }
 
 func main() {
