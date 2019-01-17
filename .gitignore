@@ -30,3 +30,6 @@ _testmain.go
 
 # mac hidden files
 .DS_Store
+
+# Anything under a tmp folder
+**/tmp/*
