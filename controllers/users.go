@@ -4,8 +4,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/schema"
+
 	"github.com/photoApp/views"
 )
+
+type SignupForm struct {
+	Email    string `schema:"email"`
+	Password string `schema:"password"`
+}
 
 func NewUsers() *Users {
 	return &Users{
@@ -27,6 +34,11 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		panic(err)
 	}
-	fmt.Fprintln(w, r.PostForm["email"])
-	fmt.Fprintln(w, r.PostForm["password"])
+
+	decoder := schema.NewDecoder()
+	var form SignupForm
+	if err := decoder.Decode(&form, r.PostForm); err != nil {
+		panic(err)
+	}
+	fmt.Fprintln(w, form)
 }
